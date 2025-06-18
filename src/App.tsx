@@ -9,7 +9,9 @@ import CountdownTimer from './components/CountdownTimer';
 import LoadingSpinner from './components/LoadingSpinner';
 
 function App() {
-  const [config] = useState<AppConfig>(getUrlParams());
+  const urlParamsResult = getUrlParams();
+  const [config] = useState<AppConfig>(urlParamsResult);
+  const [paramsError] = useState(urlParamsResult.error);
   const [basicData, setBasicData] = useState<AstrologyBasicData | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
@@ -283,6 +285,39 @@ function App() {
       </a>
     </div>
   );
+
+  // パラメータエラーの場合はエラー画面を表示
+  if (paramsError?.hasError) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-8 max-w-2xl w-full">
+          <div className="text-center">
+            <div className="text-red-500 mb-4">
+              <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <h1 className="text-2xl font-bold text-red-700 mb-4">パラメータエラー</h1>
+            <p className="text-gray-700 mb-6">
+              必要なURLパラメータが指定されていません。<br />
+              正しいリンクからアクセスしてください。
+            </p>
+            <div className="bg-white rounded p-4 text-left">
+              <p className="text-sm font-semibold text-gray-600 mb-2">不足しているパラメータ:</p>
+              <ul className="list-disc list-inside text-red-600 text-sm">
+                {paramsError.missingParams.map(param => (
+                  <li key={param}>{param}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="mt-6 text-sm text-gray-500">
+              <p>サポートが必要な場合は、管理者にお問い合わせください。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">

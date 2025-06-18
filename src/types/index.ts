@@ -30,6 +30,10 @@ export interface AppConfig {
   functionName: string;
   productName: string;
   apiStreamUrl: string;
+  error?: {
+    hasError: boolean;
+    missingParams: string[];
+  };
 }
 
 export interface StreamResponse {
