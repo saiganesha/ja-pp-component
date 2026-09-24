@@ -6,9 +6,10 @@ interface MessageBubbleProps {
   content: string;
   type: 'user' | 'ai';
   isStreaming?: boolean;
+  notice?: string;
 }
 
-const MessageBubble: React.FC<MessageBubbleProps> = ({ content, type, isStreaming }) => {
+const MessageBubble: React.FC<MessageBubbleProps> = ({ content, type, isStreaming, notice }) => {
   const renderContent = () => {
     if (type === 'user') {
       return <p className="whitespace-pre-wrap">{content}</p>;
@@ -44,6 +45,12 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ content, type, isStreamin
         } ${isStreaming ? 'animate-pulse' : ''}`}
       >
         {renderContent()}
+        {/* 本文の HTML に混ぜると、タグの途中で切れた本文に飲み込まれて見えなくなるので別に出す */}
+        {notice && (
+          <p data-notice className="mt-3 whitespace-pre-wrap text-red-700">
+            {notice}
+          </p>
+        )}
       </div>
     </div>
   );
