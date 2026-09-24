@@ -21,6 +21,8 @@ export interface Message {
   type: 'user' | 'ai';
   content: string;
   timestamp: Date;
+  // 本文の後に添える知らせ（途中で切れたときなど）。本文の HTML とは別に表示する
+  notice?: string;
 }
 
 export interface AppConfig {
